@@ -1,5 +1,5 @@
 # cherryktest
-Is a 16 bit kernel test mode, writed in C (xlang)
+Is a 16 bit kernel test mode, writed in C
 
 ### Building
 ```bash
