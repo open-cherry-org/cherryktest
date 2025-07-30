@@ -1,13 +1,24 @@
-#pragma once
+#include <stdint.h>
 
+#define VGA_WIDTH 80
 #define VGA_ADDRESS 0xB8000
-#define WHITE 0x0F
-#define GREEN 0x2F
-#define RED   0x4F
+static int row = 0;
 
-void print(const char *msg, int color);
-
-#define ASSERT(cond, msg) do { \
-    if (cond) print("[PASS] " msg "\n", GREEN); \
-    else      print("[FAIL] " msg "\n", RED);   \
-} while(0)
+void print(const char *msg, int color) {
+    volatile char *vga = (volatile char*) VGA_ADDRESS;
+    while (*msg) {
+        if (*msg == '\n') {
+            row++;
+            msg++;
+            continue;
+        }
+        int offset = (row * VGA_WIDTH + 0);
+        for (int i = 0; msg[i] && msg[i] != '\n'; i++) {
+            vga[offset * 2] = msg[i];
+            vga[offset * 2 + 1] = color;
+            offset++;
+        }
+        break;
+    }
+    row++;
+}
